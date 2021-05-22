@@ -4,13 +4,9 @@ backups
 build
 dist
 dist-Segura
-libs
 tests
 A\ fazer.txt
-compilar.bat
-main.py
 Lolicalc.exe.spec
 Lolicalc.spec
 Lolicalc.xcf
-.gitignore-a
 workspace.code-workspace
