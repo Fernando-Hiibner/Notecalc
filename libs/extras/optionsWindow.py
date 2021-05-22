@@ -61,9 +61,9 @@ def readDir(listbox, **kw):
                     listbox.select_set(listbox.size()-1)
     listbox.insert(END, "", active=False)
 
-def changeColors(caller = None, title = None, configDict = None, key = None, target = None, targetType = None, chooseColor = True):
+def changeColors(parent = None, caller = None, title = None, configDict = None, key = None, target = None, targetType = None, chooseColor = True):
     if chooseColor == True:
-        (rgb, hex) = askcolor(title = title, color = configDict[key])
+        (rgb, hex) = askcolor(parent = parent, title = title, color = configDict[key])
     else:
         hex = configDict[key]
     if targetType == 'text' and ((hex != configDict[key] and chooseColor == True) or chooseColor == False):
@@ -85,13 +85,125 @@ def changeColors(caller = None, title = None, configDict = None, key = None, tar
         if caller != None:  
             caller.config(highlightbackground = hex, bg = hex)
 
-def fontOptionsApply():
-    pass
+class OptionsWindow(MainBuilder):
+    def __init__(self, mainRoot):
+        self.mainRoot = mainRoot
+
+        self.root = MainBuilder.createTopLevel(mainRoot, geometry = "900x720+0+0", minsizeX=800, minsizeY=620, title = "Options")
+
+        self.tabControl = ttk.Notebook(self.root)
+
+        self.fontTab = ttk.Frame(self.tabControl)
+        self.themeTab = ttk.Frame(self.tabControl)
+
+        self.tabControl.add(self.fontTab, text = "Font")
+        self.tabControl.add(self.themeTab, text = "Theme")
+
+        self.tabControl.pack(expand = 1, fill = "both", padx = 5, pady = 5)
+
+        self.createLocalConfigs()
+        self.createFontTab()
+
+    def createLocalConfigs(self):
+        #Local config
+        self.tempFont = globals.font
+        self.tempVscConfig = globals.vsc
+        self.tempTextConfig = globals.textConfig
+        self.tempSideConfig = globals.sideConfig
+        self.tempColorConfig = globals.colorConfig
+
+        self.tempUpperFolderPrefix = globals.configSideUpperFolderPrefix
+        self.tempActualFolderPrefix = globals.configSideActualFolderPrefix
+        self.tempFolderPrefix = globals.configSideFolderPrefix
+        self.tempFilePrefix = globals.configSideFilePrefix    
+
+    def createFontTab(self):
+        #Frame and Listbox for Font and Font Size
+        self.fontsFrame1 = Frame(self.fontTab, highlightbackground="#cccccc", highlightthickness=0.5)
+        self.fontsFrame1.pack(fill = "both", side = "left", padx = 10, pady = 15, ipadx = 5, ipady = 5, anchor = "nw")
+        self.fontsLabel1 = Label(self.fontTab, text = "Font / Size")
+        self.fontsLabel1.place(anchor = "w", x = 15, y = 15)
+
+        self.fontsListbox = HighlightListBox(self.fontsFrame1, relief = "flat", activestyle="none", width = 25, exportselection = False)
+        self.fontsListbox.config(width = 25)
+        
+        self.lastSelectedFontsIndex = -1
+        for self.fontFamily in families():
+            self.fontsListbox.insert(END, self.fontFamily)
+            if self.fontFamily == self.tempFont.cget("family"):
+                self.lastSelectedFontsIndex = self.fontsListbox.size() - 1
+        self.fontsListbox.select_set(self.lastSelectedFontsIndex)
+        self.fontsListbox.insert(END, "", active=False)
+        self.fontsListbox.pack(expand = 1, fill = "both", padx=5, pady = 20, anchor = "nw")
+
+        self.fontSizeLabel = Label(self.fontsFrame1, text = "Size:", anchor = "w")
+        self.fontSizeLabel.pack(fill = "x", anchor = "w", side = "left")
+        
+        self.possibleFontSizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72]
+        self.fontSizeCombobox = ttk.Combobox(self.fontsFrame1, value = self.possibleFontSizes)
+        self.fontSizeCombobox.current(self.possibleFontSizes.index(self.tempFont.cget("size")))
+        self.fontSizeCombobox.pack(expand = 1,fill = "x", anchor = "w", side = "left")
+
+        self.vscCheckIntVar = IntVar(self.root, value = self.tempVscConfig)
+        self.fontVSCCheckButton = Checkbutton(self.fontsFrame1, text = "VSC", variable = self.vscCheckIntVar, onvalue = 1, offvalue = 0)
+        self.fontVSCCheckButton.pack(expand = 1,fill = "x", anchor = "w", side = "left")
+        
+        #Frame and Text for Font sample
+        self.fontsFrame2 = Frame(self.fontTab, highlightbackground="#cccccc", highlightthickness=0.5)
+        self.fontsFrame2.pack(expand = 1, fill = "both", side = "top", padx = 10, pady = 15, ipadx = 5, ipady = 5, anchor = "ne")
+        self.fontsLabel2 = Label(self.fontTab, text = "Editable Sample")
+        self.fontsLabel2.place(anchor = "w", x = 285, y = 15)
+
+        self.fontSampleText = MainBuilder.createText(self, master=self.fontsFrame2, textConfig=self.tempTextConfig, font = self.tempFont)
+        self.fontSampleText.config(richText = True)
+        self.fontSampleText.pack(expand = 1, fill = "both", padx = 5, pady = 10)
+
+        self.fontsListbox.bind("<<ListboxSelect>>", lambda event: self.getSelectedFontFromListbox(event))
+        self.fontSizeCombobox.bind("<<ComboboxSelected>>", lambda event: self.getFontSizeFromCombobox(event))
+        self.fontVSCCheckButton.config(command = lambda vsc = self.vscCheckIntVar.get(): self.fontChanges(vsc = vsc))
+    
+    def getSelectedFontFromListbox(self, event):
+        widget = event.widget
+        self.lastSelectedFontsIndex = int(widget.curselection()[0])
+        return self.fontChanges(selectedFont = widget.get(self.lastSelectedFontsIndex))
+    
+    def getFontSizeFromCombobox(self, event):
+        return self.fontChanges(size = event.widget.get())
+
+    def fontChanges(self, **kw):
+        if 'selectedFont' in kw.keys():
+            selectedFont = kw.pop('selectedFont')
+        elif self.lastSelectedFontsIndex != -1:
+            selectedFont = self.fontsListbox.get(self.lastSelectedFontsIndex)
+        else:
+            selectedFont = self.tempFont.cget("family")
+        
+        if 'size' in kw.keys():
+            size = kw.pop('size')
+        else:
+            size = self.fontSizeCombobox.get()
+        
+        self.tempFont.config(family = selectedFont, size = size)
+        self.fontSampleText.config(font = self.tempFont)
+
+        if 'vsc' in kw.keys():
+            print("Oi")
+            vsc = kw.pop('vsc')
+            if vsc == 1:
+                self.tempVscConfig = True
+                #Executar a mudança de vsc
+            else:
+                self.tempVscConfig = False
+                #Executar a mudanca de vsc
+
+
         
 def optionsWindow(mainRoot):
+    window = OptionsWindow(mainRoot)
+def aoptionsWindow(mainRoot):
     builder = MainBuilder()
     #root = builder.createRoot(geometry = "900x720+0+0", minsizeX=800, minsizeY=620, title = "Options")
-    root = Toplevel(mainRoot)
+    root = builder.createTopLevel(mainRoot, geometry = "900x720+0+0", minsizeX=800, minsizeY=620, title = "Options")
 
     tabControl = ttk.Notebook(root)
 
@@ -114,59 +226,6 @@ def optionsWindow(mainRoot):
     tempActualFolderPrefix = globals.configSideActualFolderPrefix
     tempFolderPrefix = globals.configSideFolderPrefix
     tempFilePrefix = globals.configSideFilePrefix
-
-    #Frame and Listbox for Font and Font Size
-    fontsFrame1 = Frame(fontTab, highlightbackground="#cccccc", highlightthickness=0.5)
-    fontsFrame1.pack(fill = "both", side = "left", padx = 10, pady = 15, ipadx = 5, ipady = 5, anchor = "nw")
-    fontsLabel1 = Label(fontTab, text = "Font / Size")
-    fontsLabel1.place(anchor = "w", x = 15, y = 15)
-
-    fontsListbox = HighlightListBox(fontsFrame1, relief = "flat", activestyle="none", width = 25)
-    fontsListbox.config(width = 25)
-    for fontFamily in families():
-        fontsListbox.insert(END, fontFamily)
-        if fontFamily == tempFont.cget("family"):
-            fontsListbox.select_set(fontsListbox.size() - 1)
-    fontsListbox.insert(END, "", active=False)
-    fontsListbox.pack(expand = 1, fill = "both", padx=5, pady = 20, anchor = "nw")
-
-    fontSizeLabel = Label(fontsFrame1, text = "Size:", anchor = "w")
-    fontSizeLabel.pack(fill = "x", anchor = "w", side = "left")
-    
-    sizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72]
-    fontSizeCombobox = ttk.Combobox(fontsFrame1, value = sizes)
-    fontSizeCombobox.current(sizes.index(tempFont.cget("size")))
-    fontSizeCombobox.pack(expand = 1,fill = "x", anchor = "w", side = "left")
-
-    vscCheckIntVar = IntVar(root, value = tempVscConfig)
-    fontVSCCheckButton = Checkbutton(fontsFrame1, text = "VSC", variable = vscCheckIntVar, onvalue = 1, offvalue = 0)
-    fontVSCCheckButton.pack(expand = 1,fill = "x", anchor = "w", side = "left")
-    
-    #Frame and Text for Font sample
-    fontsFrame2 = Frame(fontTab, highlightbackground="#cccccc", highlightthickness=0.5)
-    fontsFrame2.pack(expand = 1, fill = "both", side = "top", padx = 10, pady = 15, ipadx = 5, ipady = 5, anchor = "ne")
-    fontsLabel2 = Label(fontTab, text = "Editable Sample")
-    fontsLabel2.place(anchor = "w", x = 285, y = 15)
-
-    fontSampleText = builder.createText(master=fontsFrame2, textConfig=tempTextConfig, font = tempFont)
-    fontSampleText.pack(expand = 1, fill = "both", padx = 5, pady = 10)
-    Format(fontSampleText, fontSampleText)
-    FastMenu(fontSampleText, fontSampleText)
-
-    selectedFont = None
-    def selectFont(event):
-        widget = event.widget
-        index = int(widget.curselection()[0])
-        selectedFont = widget.get(index)
-        tempFont.config(family = selectedFont, size = fontSizeCombobox.get())
-        fontSampleText.config(font = tempFont)
-        
-        if vscCheckIntVar.get() == 1:
-            tempVscConfig = True
-        else:
-            tempVscConfig = False
-
-    fontsListbox.bind("<<ListboxSelect>>", lambda event: selectFont(event))
 
     #Frame and listbox for themes
     holderFrame = Frame(themeTab)

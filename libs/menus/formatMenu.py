@@ -7,7 +7,7 @@ from ..utilities import globals
 
 def createFormatMenu(root, text, menu):
     formatMenu = Menu(menu, tearoff=0)
-    format = Format(root, text)
+    format = text.format
 
     formatMenu.add_command(
         label="Title", command=lambda: format.addTags(tag="title", size = 4, sizeMod=True), accelerator="Alt+T")

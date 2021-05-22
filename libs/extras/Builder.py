@@ -24,6 +24,15 @@ class MainBuilder():
             root.iconbitmap(icon)
         return root
 
+    def createTopLevel(self, master = None, minsizeX=450, minsizeY=575, geometry="900x575+0+0", title="TopLevel", icon=None):
+        topLevel = Toplevel(master=master)
+        topLevel.minsize(width=minsizeX, height=minsizeY)
+        topLevel.geometry(geometry)
+        topLevel.title(title)
+        if icon != None:
+            topLevel.iconbitmap(icon)
+        return topLevel
+
     def createText(self, master = None, textConfig = None, font = None):
         if textConfig == None:
             textConfig = globals.textConfig
@@ -32,7 +41,7 @@ class MainBuilder():
         text = myScrolledText(master, bg=textConfig["bg"], fg=textConfig["fg"], insertbackground=textConfig["insertbackground"],
                              tabs=(
                                  textConfig["tab"]), selectbackground=textConfig["selectbackground"], selectforeground=textConfig["selectforeground"],
-                             relief=FLAT, undo=True, autoseparators=True)
+                             relief=FLAT, undo=True, autoseparators=True, richText = True)
         text.configure(font=font)
         return text
     

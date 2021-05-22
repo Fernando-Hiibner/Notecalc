@@ -1,6 +1,9 @@
 import tkinter as tk
 import tkinter.scrolledtext as tkST
 
+from ..menuClasses.Format import Format
+from ..menus.fastMenu import FastMenu
+
 class LabelButton(tk.Label):
     def __init__(self, master, highlightbackground = None, highlightforeground = None, command = None, **kw):
         tk.Label.__init__(self, master = master, **kw)
@@ -54,24 +57,27 @@ class LabelButton(tk.Label):
         self.configure(*args, **kw)
 
 class myScrolledText(tkST.ScrolledText):
-    def __init__(self, master, **kw):
+    def __init__(self, master, richText = False, **kw):
         tkST.ScrolledText.__init__(self, master = master, **kw)
-        #self.master = master
+        self.master = master
+        self.richText = richText
         if 'inactiveselect' not in kw.keys():
             self['inactiveselect'] = self['selectbackground']
         if 'exportselection' not in kw.keys():
             self['exportselection'] = False
-        '''
-        if richText == True:
-            self.format = Formatar(self.master, self)
-            self.fastMenu = Editar(self.master, self)
-        '''
+        if self.richText == True:
+            self.format = Format(self, self)
+            self.fastMenu = FastMenu(self, self)
+
     def configure(self, *args, **kw):
-        '''if 'richText' in kw.keys():
+        if 'richText' in kw.keys():
             richText = kw.pop('richText')
-            if richText == True:
-                self.format = Formatar(self.master, self)
-                self.fastMenu = Editar(self.master, self)'''
+            if richText == True and richText != self.richText:
+                self.format = Format(self, self)
+                self.fastMenu = FastMenu(self, self)
+            elif richText == False and richText != self.richText:
+                del(self.format)
+                del(self.fastMenu)
         if 'inactiveselect' in kw.keys():
             self['inactiveselect'] = kw.pop('inactiveselect')
         super().config(*args, **kw)
