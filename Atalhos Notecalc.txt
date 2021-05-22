@@ -1,0 +1,11 @@
+CTRL+1 ==> Título
+CTRL+2 ==> Subtítulo
+CTRL+3 ==> Negrito
+CTRL+4 ==> Italico
+CTRL+5 ==> Modo Escuro
+CTRL+P ==> Pomodoro
+CTRL+N ==> Novo
+CTRL+O ==> Abrir
+CTRL+S ==> Salvar
+ALT+S   ==> Salvar Como
+Teclado Númerico ==> Comandos da calculadora
