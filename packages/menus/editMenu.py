@@ -1,6 +1,6 @@
 from tkinter import Menu
 
-from ..menuClasses.Edit import Edit
+from ..menusclasses.menu_classes import Edit
 
 
 def createEditMenu(root, text, menu):

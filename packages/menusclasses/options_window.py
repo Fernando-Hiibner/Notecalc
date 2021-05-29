@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import Frame, Label, IntVar, Checkbutton
 from tkinter import ttk
 from tkinter.font import Font, families
 from tkinter.colorchooser import Chooser, askcolor
@@ -7,13 +7,11 @@ from configparser import ConfigParser
 from os import listdir, getcwd
 from os.path import expanduser, join, basename, isdir, join
 
-from ..utilities import globals
-from ..menuClasses.Format import Format
-from ..menus.fastMenu import FastMenu
-from ..myTkinterWidgets.myWidgets import HighlightListBox, LabelButton
-from ..extras.Builder import MainBuilder
-from ..extras.configManager import ConfigManager
-from ..utilities.utilities import toPath, getIcon
+from ..extras import globals
+from ..mywidgets.my_widgets import HighlightListBox, LabelButton
+from ..managers.builder_manager import MainBuilder
+from ..managers.config_manager import ConfigManager
+from ..extras.utilities import toPath, getIcon
 
 class LocalConfigs():
     def __init__(self):
@@ -58,11 +56,11 @@ class FontTabApp():
         
         self.lastSelectedFontsIndex = -1
         for self.fontFamily in families():
-            self.fontsListbox.insert(END, self.fontFamily)
+            self.fontsListbox.insert("end", self.fontFamily)
             if self.fontFamily == configs.tempFont.cget("family"):
                 self.lastSelectedFontsIndex = self.fontsListbox.size() - 1
         self.fontsListbox.select_set(self.lastSelectedFontsIndex)
-        self.fontsListbox.insert(END, "", active=False)
+        self.fontsListbox.insert("end", "", active=False)
         self.fontsListbox.pack(expand = 1, fill = "both", padx=5, pady = 20, anchor = "nw")
 
         self.fontSizeLabel = Label(self.fontsFrame1, text = "Size:", anchor = "w")
@@ -417,16 +415,16 @@ class ThemeTabApp(MainBuilder):
         for dir in listdir(dirALer):
             if isdir(join(dirALer, dir)):
                 dir = folderPrefix+dir
-                listbox.insert(END, dir)
+                listbox.insert("end", dir)
         for dir in listdir(dirALer):
             if not isdir(join(dirALer, dir)) and dir.endswith(".txt") or dir.endswith(".nxc") or dir.endswith(".ini"):
                 auxDir = dir
                 dir = filePrefix+dir
-                listbox.insert(END, dir)
+                listbox.insert("end", dir)
                 if(globals.currentWorkingDirectory != None):
                     if toPath(join(dirALer, auxDir)) == toPath(globals.currentWorkingDirectory):
                         listbox.select_set(listbox.size()-1)
-        listbox.insert(END, "", active=False)
+        listbox.insert("end", "", active=False)
 
     def changeColors(self, parent = None, caller = None, title = None, configDict = None, key = None, target = None, targetType = None, chooseColor = True):
         if chooseColor == True:
@@ -513,5 +511,3 @@ class OptionsWindow(MainBuilder):
         else:
             print("Aba 2")
 
-def optionsWindow(mainRoot):
-    window = OptionsWindow(mainRoot)

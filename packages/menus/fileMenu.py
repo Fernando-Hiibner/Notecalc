@@ -1,8 +1,8 @@
-from libs.utilities.fileOperations import openFolder
+from packages.extras.file_operations import openFolder
 from tkinter import Menu
 
-from ..menuClasses.File import File
-from ..utilities.utilities import getIcon
+from ..menusclasses.menu_classes import File
+from ..extras.utilities import getIcon
 
 def createFileMenu(janela, Caixa, menu):
     menuDoArquivo = Menu(menu, tearoff=0)

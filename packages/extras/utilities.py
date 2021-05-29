@@ -10,7 +10,7 @@ def toPath(path):
         return path
 
 def getIcon(iconName = "Notecalc.ico"):
-    icon = toPath(join("./libs/img/", iconName))
+    icon = toPath(join("./packages/img/", iconName))
     return icon
 
 def replaceSubstring(string, oldSubstring, newSubstring, optionalIndex = None):

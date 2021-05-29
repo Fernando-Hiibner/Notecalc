@@ -4,8 +4,8 @@ from configparser import ConfigParser
 from os import mkdir
 from os.path import expanduser, isdir, exists, join
 
-from ..utilities import globals
-from ..utilities.utilities import toPath
+from ..extras import globals
+from ..extras.utilities import toPath
 
 class ConfigManager():
     def __init__(self):

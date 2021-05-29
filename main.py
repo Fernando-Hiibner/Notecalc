@@ -2,12 +2,12 @@ from tkinter import Menu
 from sys import argv
 
 
-from libs.utilities import globals
-from libs.utilities.utilities import toPath
-from libs.extras.Builder import SubBuilder
+from packages.extras import globals
+from packages.extras.utilities import toPath
+from packages.managers.builder_manager import SubBuilder
 
-from libs.utilities.fileOperations import openFile
-from libs.menus import fileMenu, editMenu, formatMenu, fastMenu, optionsMenu
+from packages.extras.file_operations import openFile
+from packages.menus import fileMenu, editMenu, formatMenu, optionsMenu
 '''
 try:
     windowMasterWidgets = WindowBuilder()

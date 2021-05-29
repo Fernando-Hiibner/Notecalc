@@ -1,7 +1,6 @@
 from tkinter import Menu
-from ..menuClasses.Format import Format
-from ..menuClasses.Edit import Edit
-from ..utilities import globals
+from ..menusclasses.menu_classes import Format, Edit
+from ..extras import globals
 
 
 class FastMenu():

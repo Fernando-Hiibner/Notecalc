@@ -6,13 +6,12 @@ from tkinter.font import Font
 from sys import argv
 from os import listdir, getcwd, chdir
 from os.path import join, isdir, basename, dirname, expanduser, isfile
-from typing import overload
 
-from .configManager import ConfigManager
-from ..utilities import globals
-from ..utilities.utilities import toPath, getIcon
-from ..utilities.fileOperations import *
-from ..myTkinterWidgets.myWidgets import myScrolledText, HighlightListBox
+from .config_manager import ConfigManager
+from ..extras import globals
+from ..extras.utilities import toPath, getIcon
+from ..extras.file_operations import *
+from ..mywidgets.my_widgets import myScrolledText, HighlightListBox
 
 class MainBuilder():
     def createRoot(self, minsizeX=450, minsizeY=575, geometry="900x575+0+0", title="Notecalc", icon=None):

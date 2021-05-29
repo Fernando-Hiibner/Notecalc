@@ -5,8 +5,8 @@ from tkinter.filedialog import askopenfilename, askdirectory
 from os import getcwd, chdir
 from os.path import dirname
 
-from ..utilities import globals
-from ..utilities.utilities import toPath, replaceSubstring
+from . import globals
+from .utilities import toPath, replaceSubstring
 
 
 def openFile(root, text, dirToOpen = None):

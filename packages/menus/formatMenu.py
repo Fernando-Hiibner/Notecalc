@@ -1,7 +1,7 @@
 from tkinter import *
 
-from ..menuClasses.Format import Format
-from ..utilities import globals
+from ..menusclasses.menu_classes import Format
+from ..extras import globals
 
 
 
