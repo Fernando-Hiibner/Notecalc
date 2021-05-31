@@ -1,13 +1,14 @@
 from tkinter import Menu
 from sys import argv
 
-
 from packages.extras import globals
 from packages.extras.utilities import toPath
+from packages.extras.file_operations import openFile
+
 from packages.managers.builder_manager import SubBuilder
 
-from packages.extras.file_operations import openFile
-from packages.menus import fileMenu, editMenu, formatMenu, optionsMenu
+from packages.menus.menuroutes import createEditMenu, createFileMenu, createFormatMenu, createOptionsMenu
+
 '''
 try:
     windowMasterWidgets = WindowBuilder()
@@ -35,16 +36,15 @@ except Exception as e:
 widgetBuilder = SubBuilder()
 root = widgetBuilder.root
 text = widgetBuilder.text
-mainPannedWindow = widgetBuilder.mainPannedWindow
-side = widgetBuilder.side
+
 try:
     openFile(root, text, toPath(argv[1]))
     globals.currentWorkingDirectory = toPath(argv[1])
 except:
     pass
 menu = Menu(root)
-fileMenu.createFileMenu(root, text, menu)
-editMenu.createEditMenu(root, text, menu)
-formatMenu.createFormatMenu(root, text, menu)
-optionsMenu.createOptionsMenu(root, mainPannedWindow, side, text, menu)
+createFileMenu(root, text, menu)
+createEditMenu(root, text, menu)
+createFormatMenu(root, text, menu)
+createOptionsMenu(root, menu)
 root.mainloop()

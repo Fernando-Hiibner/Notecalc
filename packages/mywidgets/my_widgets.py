@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.scrolledtext as tkST
 
 from ..menusclasses.menu_classes import Format
+
 from ..menus.fastMenu import FastMenu
 
 class LabelButton(tk.Label):
