@@ -28,28 +28,22 @@ class Globals():
     configSideFolderPrefix = None
     configSideFilePrefix = None
     global colorConfig
-    colorConfig = {"default": "#000000", "title": "#af00db", "subtitle": "#0000ff",
-                    "bold": "#ce8349", "italic": "#008000", "underline": "#267e99", "overstrike": "#a31515"}
+    colorConfig = None
     global textConfig
-    textConfig = {"tab": '1c', "bg": 'SystemWindow', "fg": 'black',
-                   "selectbackground": '#dddddd', "selectforeground": 'black', "insertbackground": 'black'}
+    textConfig = None
     global pannedWindowBGConfig
     pannedWindowBGConfig = "#f3f3f3"
     global sideConfig
-    sideConfig = {"family": "Courier New", "size": "10", "bg": '#f3f3f3',
-                  "fg": '#333333', "selectbackground": '#dddddd', "selectforeground": 'black', "highlightbackground" : "#dddddd", "highlightforeground" : "#333333"}
+    sideConfig = None
     #O tema dark que vai vir por padrão
     global darkColorConfig
-    darkColorConfig = {"default": "#cccccc", "title": "#b96fb4", "subtitle": "#499cb3",
-                    "bold": "#ce8349", "italic": "#6a9955", "underline": "#3ac9a3", "overstrike": "#dcdcaa"}
+    darkColorConfig = None
 
     global darkPannedWindowBGConfig
-    darkPannedWindowBGConfig = "#1e1e1e"
+    darkPannedWindowBGConfig = None
 
     global darkTextConfig
-    darkTextConfig = {"tab": '1c', "bg": '#1e1e1e', "fg": '#cccccc',
-                   "selectbackground": '#264f78', "selectforeground": '#cccccc', "insertbackground": '#cccccc'}
+    darkTextConfig = None
 
     global darkSideConfig
-    darkSideConfig = {"family": "Courier New", "size": "10", "bg": '#252526',
-                  "fg": '#cccccc', "selectbackground": '#3e3e3e', "selectforeground": '#cccccc', "highlightbackground" : "#3e3e3e", "highlightforeground" : "#cccccc"}
+    darkSideConfig = None

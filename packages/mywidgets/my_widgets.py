@@ -29,7 +29,7 @@ class LabelButton(tk.Label):
             self.bind("<Button-1>", lambda event: self.command())
         self['background'] = self.highlightbackground
         self['foreground'] = self.highlightforeground
-        
+
     def onLeave(self, e):
         if self.command != None:
             self.unbind("<Button-1>")

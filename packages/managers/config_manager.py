@@ -1,136 +1,150 @@
 from tkinter import *
 from tkinter.font import Font
 from configparser import ConfigParser
-from os import mkdir
+from os import get_exec_path, mkdir, listdir
 from os.path import expanduser, isdir, exists, join
 
 from ..extras import globals
 from ..extras.utilities import toPath
 
+from json import load, dump
+
 class ConfigManager():
     def __init__(self):
         self.configFolder = toPath(expanduser("~/Documents/Notecalc"))
+        self.configDir = toPath(join(self.configFolder, "config.json"))
+        self.themesFolder = toPath(join(self.configFolder, "themes"))
         if isdir(self.configFolder):
-            self.configDir = toPath(join(self.configFolder, "config.ini"))
+            if not isdir(self.themesFolder):
+                mkdir(self.themesFolder)
+                self.createThemes()
             if exists(self.configDir):
-                self.readConfig(self.configDir)
-            elif not exists(self.configDir):
-                self.createConfig(self.configDir)
+                self.readConfig()
+            else:
+                self.createConfig()
+                self.readConfig()
 
-        elif not isdir(self.configFolder):
+        else:
             try:
                 mkdir(self.configFolder)
-                self.createConfig(join(self.configFolder, "config.ini"))
-            except:
-                pass
+                mkdir(join(self.configFolder, "themes"))
+                self.createConfig()
+                self.createThemes()
+                self.readConfig()
+            except Exception as e:
+                print("Erro:", str(e), "\nFunção: ConfigManager.__init__()\nCódigo: config_manager.py")
+    def createConfig(self):
+        config = {
+            "general" :
+            {
+                "themeName" : "Default Light",
+                "fontFamily" : "Calibri",
+                "fontSize" : 18,
+                "showSide" : False,
+                "sidePrefix" : "sidePrefix1",
+                "vsc" : False
+            },
+            "sidePrefix1" :
+            {
+                "name" : "Classic Side Prefix",
+                "upperFolder" : "^ Voltar pasta",
+                "actualFolder" : "v ",
+                "folder" : "    >",
+                "file" : "    ",
+            },
+            "sidePrefix2" :
+            {
+                "name" : "Nerd Fonts Side Prefix",
+                "upperFolder" : "   Voltar pasta",
+                "actualFolder" : "   ",
+                "folder" : "    ",
+                "file" : "     "
+            }
+        }
+        with open(self.configDir, "w", encoding="utf-8") as generalConfig:
+            dump(config, generalConfig, indent=4)
+            generalConfig.close()
+    def createThemes(self):
+        defaultLight = {
+            "textConfig" : {"tab": '1c', "bg": 'SystemWindow', "fg": 'black',
+                   "selectbackground": '#dddddd', "selectforeground": 'black', "insertbackground": 'black'},
+            "sideConfig" : {"family": "Courier New", "size": "10", "bg": '#f3f3f3',
+                  "fg": '#333333', "selectbackground": '#dddddd', "selectforeground": 'black', "highlightbackground" : "#dddddd", "highlightforeground" : "#333333"},
+            "pannedWindowBGConfig" : "#f3f3f3",
+            "colorConfig" : {"default": "#000000", "title": "#af00db", "subtitle": "#0000ff",
+                    "bold": "#ce8349", "italic": "#008000", "underline": "#267e99", "overstrike": "#a31515"}
+        }
+        defaultDark = {
+            "textConfig" : {"tab": '1c', "bg": '#1e1e1e', "fg": '#cccccc',
+                   "selectbackground": '#264f78', "selectforeground": '#cccccc', "insertbackground": '#cccccc'},
+            "sideConfig" : {"family": "Courier New", "size": "10", "bg": '#252526',
+                  "fg": '#cccccc', "selectbackground": '#3e3e3e', "selectforeground": '#cccccc', "highlightbackground" : "#3e3e3e", "highlightforeground" : "#cccccc"},
+            "pannedWindowBGConfig" : "#1e1e1e",
+            "colorConfig" : {"default": "#cccccc", "title": "#b96fb4", "subtitle": "#499cb3",
+                    "bold": "#ce8349", "italic": "#6a9955", "underline": "#3ac9a3", "overstrike": "#dcdcaa"}
+        }
+        with open(toPath(join(self.themesFolder, "Default Light"+".json")), "w", encoding="utf-8") as themes:
+            dump(defaultLight, themes, indent=4)
+            themes.close()
+        with open(toPath(join(self.themesFolder, "Default Dark"+".json")), "w", encoding="utf-8") as themes:
+            dump(defaultDark, themes, indent=4)
+            themes.close()
 
-    def createConfig(self, configDir):
-        configDir = toPath(configDir)
-        config = ConfigParser()
-        config.add_section("general")
-        config["general"]["theme"] = "default"
-        config["general"]["fontFamily"] = "Calibri"
-        config["general"]["fontSize"] = "18"
-        config["general"]["side"] = "off" 
-        config["general"]["sidePrefix"] = "SidePrefix1"
-        config["general"]["vsc"] = "off"
-        config.add_section("SidePrefix1")
-        config["SidePrefix1"]["upperFolder"] = "\"^\""
-        config["SidePrefix1"]["actualFolder"] = "\"v \""
-        config["SidePrefix1"]["folder"] = "\"   >\""
-        config["SidePrefix1"]["file"] = "\"    \""
-        config.add_section("SidePrefix2")
-        config["SidePrefix2"]["upperFolder"] = "\"   Voltar pasta\""
-        config["SidePrefix2"]["actualFolder"] = "\"   \""
-        config["SidePrefix2"]["folder"] = "\"    \""
-        config["SidePrefix2"]["file"] = "\"     \""
-        config.add_section("default")
-        config["default"]["configCaixa"] = str(globals.textConfig)
-        config["default"]["configSide"] = str(globals.sideConfig)
-        config["default"]["configBloco"] = str(globals.pannedWindowBGConfig)
-        config["default"]["configCores"] = str(globals.colorConfig)
-        config.add_section("dark")
-        config["dark"]["configCaixa"] = str(globals.darkTextConfig)
-        config["dark"]["configSide"] = str(globals.darkSideConfig)
-        config["dark"]["configBloco"] = str(globals.darkPannedWindowBGConfig)
-        config["dark"]["configCores"] = str(globals.darkColorConfig)
-        with open(configDir, 'w', encoding='utf-8') as cfg:
-            config.write(cfg)
-        self.readConfig(configDir)
+    def readConfig(self):
+        with open(self.configDir, 'r', encoding="utf-8") as generalConfig:
+            gConfig = load(generalConfig)
+            generalConfig.close()
+        with open(toPath(join(self.themesFolder, gConfig["general"]["themeName"]+".json")), 'r', encoding="utf-8") as themeConfig:
+            tConfig = load(themeConfig)
+            themeConfig.close()
 
-    def readConfig(self, configDir, globalRead = True, **kw):
-        #Variables:
+        globals.font = Font(family=gConfig["general"]["fontFamily"], size=gConfig["general"]["fontSize"])
+        globals.side = gConfig["general"]["showSide"]
+        globals.vsc  = gConfig["general"]["vsc"]
 
-        configDir = toPath(configDir)
-        config = ConfigParser()
-        config.read(configDir, encoding="utf-8")
-        if "font" not in kw.keys():
-            font = Font(family=config.get("general", "fontFamily"), size=config.get("general", "fontSize"))
-        else:
-            font = kw.pop("font")
-        if "side" not in kw.keys():
-            side = config.getboolean("general", "side")
-        else:
-            side = kw.pop("side")
-        if "vsc" not in kw.keys():
-            vsc = config.getboolean("general", "vsc")
-        else:
-            vsc = kw.pop("vsc")
-        if "sidePrefix" not in kw.keys():
-            sidePrefix = config.get("general", "sidePrefix")
-        else:
-            sidePrefix = kw.pop("sidePrefix")
+        globals.theme = gConfig["general"]["themeName"]
 
-        for section in config.sections():
-            if section == sidePrefix:
-                configSideUpperFolderPrefix = config.get(section, "upperFolder", raw = True).strip("\"")
-                configSideActualFolderPrefix = config.get(section, "actualFolder", raw = True).strip("\"")
-                configSideFolderPrefix = config.get(section, "folder", raw = True).strip("\"")
-                configSideFilePrefix = config.get(section, "file", raw = True).strip("\"")
+        sidePrefix = gConfig["general"]["sidePrefix"]
+        globals.sidePrefix = gConfig[sidePrefix]["name"]
+        globals.configSideUpperFolderPrefix = gConfig[sidePrefix]["upperFolder"]
+        globals.configSideActualFolderPrefix = gConfig[sidePrefix]["actualFolder"]
+        globals.configSideFolderPrefix = gConfig[sidePrefix]["folder"]
+        globals.configSideFilePrefix = gConfig[sidePrefix]["file"]
 
-        if "theme" not in kw.keys():
-            theme = config.get("general", "theme")
-        else:
-            theme = kw.pop("theme")
+        globals.textConfig = tConfig["textConfig"]
+        globals.sideConfig = tConfig["sideConfig"]
+        globals.pannedWindowBGConfig = tConfig["pannedWindowBGConfig"]
+        globals.colorConfig = tConfig["colorConfig"]
 
-        for section in config.sections():
-            if section == theme:
-                textConfig = eval(
-                    config.get(section, "configCaixa"))
-                sideConfig = eval(
-                    config.get(section, "configSide"))
-                pannedWindowBGConfig = config.get(section, "configBloco")
-                colorConfig = eval(config.get(section, "configCores"))
-
-        if globalRead == True:
-            globals.font = font
-            globals.side = side
-            globals.vsc = vsc
-
-            globals.sidePrefix = sidePrefix
-            globals.configSideUpperFolderPrefix = configSideUpperFolderPrefix
-            globals.configSideActualFolderPrefix = configSideActualFolderPrefix
-            globals.configSideFolderPrefix = configSideFolderPrefix
-            globals.configSideFilePrefix = configSideFilePrefix
-
-            globals.theme = theme
-
-            globals.textConfig = textConfig
-            globals.sideConfig = sideConfig
-            globals.pannedWindowBGConfig = pannedWindowBGConfig
-            globals.colorConfig = colorConfig
-        else:
-            return {"font": font, "side" : side, "vsc" : vsc, "sidePrefix" : sidePrefix,
-                    "cfgSideUpper" : configSideUpperFolderPrefix, "cfgSideActual" : configSideActualFolderPrefix, "cfgSideFolder" : configSideFolderPrefix, "cfgSideFile" : configSideFilePrefix, 
-                    "theme" : theme, "textConfig" : textConfig, "sideConfig" : sideConfig, "pannedWindowBGConfig" : pannedWindowBGConfig, "colorConfig" : colorConfig}
-
-    
-    def modifyConfig(self, section, key, value):
-        configDir = toPath(join(expanduser("~/Documents/Notecalc"), "config.ini"))
-        config = ConfigParser()
-        config.read(configDir, encoding="utf-8")
-        config[section][key] = value;
-        with open(configDir, 'w', encoding='utf-8') as cfg:
-            config.write(cfg)
-            cfg.close()
-        return
+    def modifyConfig(self, sectionKeyValueDict):
+        with open(self.configDir, "r", encoding="utf-8") as getConfig:
+            gConfig = load(getConfig)
+            getConfig.close()
+        for section in sectionKeyValueDict.keys():
+            for key, value in sectionKeyValueDict[section].items():
+                gConfig[section][key] = value
+        with open(self.configDir, "w") as newConfig:
+            dump(gConfig, newConfig, indent=4)
+            newConfig.close()
+    def modifyTheme(self, keyValueDict, themeName):
+        with open(toPath(join(self.themesFolder, themeName+".json")), "r", encoding="utf-8") as getTheme:
+            tConfig = load(getTheme)
+            getTheme.close()
+        for key, value in keyValueDict.items():
+            tConfig[key] = value
+        with open(toPath(join(self.themesFolder, themeName+".json")), "w", encoding="utf-8") as newTheme:
+            dump(tConfig, newTheme, indent=4)
+            newTheme.close()
+    def newTheme(self, themeDict, themeName):
+        with open(join(self.themesFolder, themeName+".json"), "w", encoding="utf-8") as newTheme:
+            dump(themeDict, newTheme, indent=4)
+            newTheme.close()
+    def getThemes(self):
+        themes = [themeFile[0:-5] for themeFile in listdir(self.themesFolder)]
+        return themes
+    def getSidePrefix(self):
+        with open(self.configDir, 'r', encoding="utf-8") as getConfig:
+            config = load(getConfig)
+            getConfig.close()
+        prefix = [config[section]["name"] for section in config.keys() if "sidePrefix" in section]
+        return prefix

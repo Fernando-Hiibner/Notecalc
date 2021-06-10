@@ -43,22 +43,23 @@ class MainBuilder():
                              relief=FLAT, undo=True, autoseparators=True, richText = True)
         text.configure(font=font)
         return text
-    
+
     def createSide(self, master = None, sideConfig = None):
         if sideConfig == None:
             sideConfig = globals.sideConfig
+            print(sideConfig)
         self.upperFolderPrefix = globals.configSideUpperFolderPrefix
         self.actualFolderPrefix = globals.configSideActualFolderPrefix
         self.folderPrefix = globals.configSideFolderPrefix
         self.filePrefix = globals.configSideFilePrefix
-        
+
         side = HighlightListBox(master, bg=sideConfig["bg"], relief=FLAT, bd=0, highlightthickness=0,
                             fg=sideConfig["fg"], selectbackground=sideConfig["selectbackground"], selectforeground=sideConfig["selectforeground"], activestyle="none",
                             highlightbackground=sideConfig["highlightbackground"], highlightforeground=sideConfig["highlightforeground"])
         sideFont = Font(
             family=sideConfig["family"], size=sideConfig["size"])
         side.config(font=sideFont, width = 25)
-        
+
         return side
 
 class SubBuilder(MainBuilder):
@@ -139,7 +140,7 @@ class SubBuilder(MainBuilder):
                 i = self.folderPrefix+i
                 self.side.insert(END, i)
         for i in listdir(dirToRead):
-            if not isdir(join(dirToRead, i)) and i.endswith(".txt") or i.endswith(".nxc") or i.endswith(".ini"):
+            if not isdir(join(dirToRead, i)) and i.endswith(".txt") or i.endswith(".nxc") or i.endswith(".json"):
                 j = i
                 i = self.filePrefix+i
                 self.side.insert(END, i)
@@ -156,15 +157,15 @@ class SubBuilder(MainBuilder):
         else:
             pass
         self.root.after(200, self.update)
-    
+
     def showHideSide(self):
         self.sideControl = not self.sideControl
         if self.sideControl == False:
-            ConfigManager().modifyConfig("general", "side", "off")
+            ConfigManager().modifyConfig({"general" : {"showSide" : False}})
             self.mainPannedWindow.forget(self.side)
-            
+
         elif self.sideControl == True:
-            ConfigManager().modifyConfig("general", "side", "on")
+            ConfigManager().modifyConfig({"general" : {"showSide" : True}})
             self.mainPannedWindow.add(self.side, before=self.subPannedWindow)
 
     def __init__(self):
@@ -187,12 +188,12 @@ class SubBuilder(MainBuilder):
         self.update()
         if globals.side == True:
             self.mainPannedWindow.add(self.side)
-        
+
         # Criação do Bloco 2
         self.subPannedWindow = PanedWindow(
             self.mainPannedWindow, relief="flat", bg=globals.pannedWindowBGConfig, borderwidth=0)
         self.mainPannedWindow.add(self.subPannedWindow)
         self.text = self.createText(master=self.subPannedWindow)
         #Mostrar ou ocultar Side
-        self.sideControl = globals.side         
+        self.sideControl = globals.side
         self.root.bind("<Alt-p>", lambda event: self.showHideSide())

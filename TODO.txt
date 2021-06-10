@@ -1,0 +1,8 @@
+TODO Limpar o menu de opções (o código)
+TODO Arrumar o change color
+TODO Arrumar as seleções do change color
+TODO Mds basicamente ir arrumando uma porrada de coisas no options menu e o que mais for necessario
+TODO Fazer uma limpeza e formatada no código
+TODO Testar varios cenarios
+TODO IMPORTANTE! Arrumar o file_operations
+TODO IMPORTANTE! Ver pq o local config ta mexendo com as configs do globals

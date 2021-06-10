@@ -22,7 +22,7 @@ try:
         globals.dirDeTrabalhoAtual = toPath(argv[1])
     except:
         pass
-        
+
     menu = Menu(janela)
     criarMenuArquivo(janela, Caixa, menu)
     editar = criarMenuEditar(janela, Caixa, menu)
