@@ -3,3 +3,18 @@ https://stackoverflow.com/questions/11993290/truly-custom-font-in-tkinter/306313
 
 E isso pq parece interessante
 https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.slideshare.net%2Frdonkin%2Fminecraft-in-500-lines-with-pyglet-pycon-uk&psig=AOvVaw3Fy_CdJ_Qs1FI1YzPpiQXt&ust=1623427526408000&source=images&cd=vfe&ved=0CA0QjhxqFwoTCPCm5fq4jfECFQAAAAAdAAAAABAm
+
+def on_drag_start(event):
+    widget = event.widget
+    widget._drag_start_x = event.x
+    widget._drag_start_y = event.y
+
+def on_drag_motion(event):
+    widget = event.widget
+    x = widget.winfo_x() - widget._drag_start_x + event.x
+    y = widget.winfo_y() - widget._drag_start_y + event.y
+    widget.place(x=x, y=y)
+
+def make_draggable(widget):
+    widget.bind("<Button-1>", on_drag_start)
+    widget.bind("<B1-Motion>", on_drag_motion)
