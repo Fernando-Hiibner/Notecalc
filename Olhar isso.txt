@@ -1,0 +1,5 @@
+https://pythonhosted.org/pyglet/programming_guide/loading_custom_fonts.html
+https://stackoverflow.com/questions/11993290/truly-custom-font-in-tkinter/30631309
+
+E isso pq parece interessante
+https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.slideshare.net%2Frdonkin%2Fminecraft-in-500-lines-with-pyglet-pycon-uk&psig=AOvVaw3Fy_CdJ_Qs1FI1YzPpiQXt&ust=1623427526408000&source=images&cd=vfe&ved=0CA0QjhxqFwoTCPCm5fq4jfECFQAAAAAdAAAAABAm
