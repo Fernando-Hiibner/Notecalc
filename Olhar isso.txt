@@ -18,3 +18,5 @@ def on_drag_motion(event):
 def make_draggable(widget):
     widget.bind("<Button-1>", on_drag_start)
     widget.bind("<B1-Motion>", on_drag_motion)
+
+https://stackoverflow.com/questions/37280004/tkinter-how-to-drag-and-drop-widgets
