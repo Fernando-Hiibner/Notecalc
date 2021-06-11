@@ -507,14 +507,18 @@ class ThemeTabApp(MainBuilder):
 
         self.themesOptionsSave = ttk.Button(themeTab, text="Save on Current")
         self.themesOptionsSave.pack(side="right", anchor="se", padx=10, pady=5)
+        #Salva, não pode salvar em cima dos quatro temas default (Default light, default dark, GitHub, HighContrast)
 
         self.themesOptionsNewtheme = ttk.Button(themeTab, text="Save as new")
         self.themesOptionsNewtheme.pack(
             side="right", anchor="se", padx=10, pady=5)
+        #Salva um tema novo, não pode ter nome repetido e depois disso da um apply
 
         self.themesOptionsApply = ttk.Button(themeTab, text="Apply")
         self.themesOptionsApply.pack(
             side="right", anchor="se", padx=10, pady=5)
+        #Mudar pra tela de options incluido as outras abas, e o programa principal, não salvar o tema mas caso não estiver salvo perguntar se quer salvar
+
 
     def readDir(self, listbox, **kw):
         if "prefix" not in kw.keys():

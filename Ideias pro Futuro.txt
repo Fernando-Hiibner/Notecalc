@@ -1,0 +1,2 @@
+Separar tudo por frame pra ter bordas finas e com cor entre os widgets pra copiar mais um poquinho o vs code kkkkk
+Adcionar botões pra isso no menu de options e fazer um conversor de tema antigo pro novo com as bordas
