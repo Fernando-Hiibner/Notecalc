@@ -21,7 +21,7 @@ class LocalConfigs():
         self.tempTextConfig = globals.textConfig
         self.tempSideConfig = globals.sideConfig
         self.tempColorConfig = globals.colorConfig
-        self.tempPannedBGColor = globals.pannedWindowBGConfig
+        self.tempPannedBGColor = {"bg" : globals.pannedWindowBGConfig}
 
         self.tempUpperFolderPrefix = globals.configSideUpperFolderPrefix
         self.tempActualFolderPrefix = globals.configSideActualFolderPrefix
@@ -191,6 +191,10 @@ class ThemeTabApp(MainBuilder):
             self.leftTextOptionsHolderFrame, text="Background:")
         self.textOptionsLabelBGColor.pack(side="top", anchor="nw", pady=1)
 
+        self.textOptionsLabelPannedBGColor = Label(
+            self.leftTextOptionsHolderFrame, text="Panned Background:")
+        self.textOptionsLabelPannedBGColor.pack(side="top", anchor="nw", pady=1)
+
         self.textOptionsLabelFGColor = Label(
             self.leftTextOptionsHolderFrame, text="Foreground:")
         self.textOptionsLabelFGColor.pack(side="top", anchor="nw", pady=1)
@@ -220,6 +224,11 @@ class ThemeTabApp(MainBuilder):
         self.textOptionsButtonBGColor.pack(
             side="top", anchor="nw", fill="x", padx=5, pady=1)
 
+        self.textOptionsButtonPannedBGColor = LabelButton(
+            self.rightTextOptionsHolderFrame, width=10, relief="flat", bg=configs.tempPannedBGColor["bg"])
+        self.textOptionsButtonPannedBGColor.pack(
+            side="top", anchor="nw", fill="x", padx=5, pady=1)
+
         self.textOptionsButtonFGColor = LabelButton(
             self.rightTextOptionsHolderFrame, width=10, relief="flat", bg=configs.tempTextConfig['fg'])
         self.textOptionsButtonFGColor.pack(
@@ -243,7 +252,7 @@ class ThemeTabApp(MainBuilder):
         # Side prefix options
         self.sidePrefixOptionsLabel = Label(
             themeTab, text="Side Prefix Options")
-        self.sidePrefixOptionsLabel.place(anchor="w", x=15, y=213)
+        self.sidePrefixOptionsLabel.place(anchor="w", x=15, y=238)
 
         self.sidePrefixOptionsFrame = Frame(
             self.themeMainHolderFrame, highlightbackground="#cccccc", highlightthickness=0.5)
@@ -260,7 +269,7 @@ class ThemeTabApp(MainBuilder):
 
         # Main frame and labels for side option
         self.themesSideOptionsLabel = Label(themeTab, text="Side Options")
-        self.themesSideOptionsLabel.place(anchor="w", x=15, y=273)
+        self.themesSideOptionsLabel.place(anchor="w", x=15, y=298)
 
         self.themesSideOptionsFrame = Frame(
             self.themeMainHolderFrame, highlightbackground="#cccccc", highlightthickness=0.5)
@@ -341,16 +350,16 @@ class ThemeTabApp(MainBuilder):
 
         self.themesVscOptionsLabel = Label(
             self.themeMainHolderFrame, text="VSC Options")
-        self.themesVscOptionsLabel.place(anchor="w", x=10, y=423)
+        self.themesVscOptionsLabel.place(anchor="w", x=10, y=448)
 
         # Label and and frame for texts
         self.leftVscOptionsHolderFrame = Frame(self.themesVscOptionsFrame)
         self.leftVscOptionsHolderFrame.pack(
             expand=1, side="left", anchor="nw", pady=5)
 
-        self.vscOptionsLabelDefaultColor = Label(
-            self.leftVscOptionsHolderFrame, text="Default Color: ")
-        self.vscOptionsLabelDefaultColor.pack(side="top", anchor="nw", pady=1)
+        # self.vscOptionsLabelDefaultColor = Label(
+        #     self.leftVscOptionsHolderFrame, text="Default Color: ")
+        # self.vscOptionsLabelDefaultColor.pack(side="top", anchor="nw", pady=1)
 
         self.vscOptionsLabelTitleColor = Label(
             self.leftVscOptionsHolderFrame, text="Title Color: ")
@@ -383,10 +392,10 @@ class ThemeTabApp(MainBuilder):
         self.rightVscOptionsHolderFrame.pack(
             expand=1, fill="x", side="right", anchor="nw", pady=5)
 
-        self.vscOptionsButtonDefaultColor = LabelButton(
-            self.rightVscOptionsHolderFrame, width=10, relief="flat", bg=configs.tempColorConfig['default'])
-        self.vscOptionsButtonDefaultColor.pack(
-            side="top", anchor="nw", fill="x", padx=5, pady=1)
+        # self.vscOptionsButtonDefaultColor = LabelButton(
+        #     self.rightVscOptionsHolderFrame, width=10, relief="flat", bg=configs.tempColorConfig['default'])
+        # self.vscOptionsButtonDefaultColor.pack(
+        #     side="top", anchor="nw", fill="x", padx=5, pady=1)
 
         self.vscOptionsButtonTitleColor = LabelButton(
             self.rightVscOptionsHolderFrame, width=10, relief="flat", bg=configs.tempColorConfig['title'])
@@ -428,10 +437,10 @@ class ThemeTabApp(MainBuilder):
         self.themesRightLabel.place(anchor="w", x=285, y=15)
 
         self.themesLeftPannedWin = PanedWindow(self.themesRightFrame,
-                                               relief="flat", bg=configs.tempPannedBGColor, borderwidth=0)
+                                               relief="flat", bg=configs.tempPannedBGColor["bg"], borderwidth=0)
         self.themesLeftPannedWin.pack(fill="both", expand=1, padx=5, pady=10)
         self.themesRightPannedWin = PanedWindow(self.themesRightFrame,
-                                                relief="flat", bg=configs.tempPannedBGColor, borderwidth=0)
+                                                relief="flat", bg=configs.tempPannedBGColor["bg"], borderwidth=0)
 
         self.themesSampleSide = MainBuilder.createSide(
             self, master=self.themesLeftPannedWin)
@@ -442,24 +451,26 @@ class ThemeTabApp(MainBuilder):
         # Sample dir structure in sample side
         self.readDir(self.themesSampleSide)
 
-        self.themeSampleText = MainBuilder.createText(
+        self.themesSampleText = MainBuilder.createText(
             self, master=self.themesRightPannedWin)
-        self.themeSampleText.config(richText=True)
-        self.themeSampleText.pack(expand=1, side="left", fill="both", pady=10)
-        self.themesRightPannedWin.add(self.themeSampleText)
+        self.themesSampleText.config(richText=True)
+        self.themesSampleText.pack(expand=1, side="left", fill="both", pady=10)
+        self.themesRightPannedWin.add(self.themesSampleText)
 
         # Programar os botões
 
         self.textOptionsButtonBGColor.config(command=lambda: self.changeColors(
-            root, self.textOptionsButtonBGColor, 'Text Background Color', configs.tempTextConfig, 'bg', self.themeSampleText, 'text'))
+            root, self.textOptionsButtonBGColor, 'Text Background Color', configs.tempTextConfig, 'bg', self.themesSampleText, 'text'))
+        self.textOptionsButtonPannedBGColor.config(command=lambda: self.changeColors(
+            root, self.textOptionsButtonPannedBGColor, 'Panned Background Color', configs.tempPannedBGColor, 'bg', self.themesLeftPannedWin, 'panned'))
         self.textOptionsButtonFGColor.config(command=lambda: self.changeColors(
-            root, self.textOptionsButtonFGColor, 'Text Foreground Color', configs.tempTextConfig, 'fg', self.themeSampleText, 'text'))
+            root, self.textOptionsButtonFGColor, 'Text Foreground Color', configs.tempTextConfig, 'fg', self.themesSampleText, 'text'))
         self.textOptionsButtonSelectBGColor.config(command=lambda: self.changeColors(
-            root, self.textOptionsButtonSelectBGColor, 'Text Select Background Color', configs.tempTextConfig, 'selectbackground', self.themeSampleText, 'text'))
+            root, self.textOptionsButtonSelectBGColor, 'Text Select Background Color', configs.tempTextConfig, 'selectbackground', self.themesSampleText, 'text'))
         self.textOptionsButtonSelectFGColor.config(command=lambda: self.changeColors(
-            root, self.textOptionsButtonSelectFGColor, 'Text Select Foreground Color', configs.tempTextConfig, 'selectforeground', self.themeSampleText, 'text'))
+            root, self.textOptionsButtonSelectFGColor, 'Text Select Foreground Color', configs.tempTextConfig, 'selectforeground', self.themesSampleText, 'text'))
         self.textOptionsButtonInsertBGColor.config(command=lambda: self.changeColors(
-            root, self.textOptionsButtonInsertBGColor, 'Text Insert Background Color', configs.tempTextConfig, 'insertbackground', self.themeSampleText, 'text'))
+            root, self.textOptionsButtonInsertBGColor, 'Text Insert Background Color', configs.tempTextConfig, 'insertbackground', self.themesSampleText, 'text'))
 
         self.sideOptionsButtonBGColor.config(command=lambda: self.changeColors(
             root, self.sideOptionsButtonBGColor, 'Side Background Color', configs.tempSideConfig, 'bg', self.themesSampleSide, 'side'))
@@ -477,22 +488,22 @@ class ThemeTabApp(MainBuilder):
         # vscOptionsButtonDefaultColor.config(command=lambda: changeColors(
         #    vscOptionsButtonDefaultColor, 'VSC Default Color', tempColorConfig, 'default', themeSampleText, 'font'))
         self.vscOptionsButtonTitleColor.config(command=lambda: self.changeColors(
-            root, self.vscOptionsButtonTitleColor, 'VSC Title Color', configs.tempColorConfig, 'title', self.themeSampleText, 'font'))
+            root, self.vscOptionsButtonTitleColor, 'VSC Title Color', configs.tempColorConfig, 'title', self.themesSampleText, 'font'))
         self.vscOptionsButtonSubtitleColor.config(command=lambda: self.changeColors(
-            root, self.vscOptionsButtonSubtitleColor, 'VSC Subtitle Color', configs.tempColorConfig, 'subtitle', self.themeSampleText, 'font'))
+            root, self.vscOptionsButtonSubtitleColor, 'VSC Subtitle Color', configs.tempColorConfig, 'subtitle', self.themesSampleText, 'font'))
         self.vscOptionsButtonBoldColor.config(command=lambda: self.changeColors(
-            root, self.vscOptionsButtonBoldColor, 'VSC Bold Color', configs.tempColorConfig, 'bold', self.themeSampleText, 'font'))
+            root, self.vscOptionsButtonBoldColor, 'VSC Bold Color', configs.tempColorConfig, 'bold', self.themesSampleText, 'font'))
         self.vscOptionsButtonItalicColor.config(command=lambda: self.changeColors(
-            root, self.vscOptionsButtonItalicColor, 'VSC Italic Color', configs.tempColorConfig, 'italic', self.themeSampleText, 'font'))
+            root, self.vscOptionsButtonItalicColor, 'VSC Italic Color', configs.tempColorConfig, 'italic', self.themesSampleText, 'font'))
         self.vscOptionsButtonUnderlineColor.config(command=lambda: self.changeColors(
-            root, self.vscOptionsButtonUnderlineColor, 'VSC Underline Color', configs.tempColorConfig, 'underline', self.themeSampleText, 'font'))
+            root, self.vscOptionsButtonUnderlineColor, 'VSC Underline Color', configs.tempColorConfig, 'underline', self.themesSampleText, 'font'))
         self.vscOptionsButtonOverstrikeColor.config(command=lambda: self.changeColors(
-            root, self.vscOptionsButtonOverstrikeColor, 'VSC Overstrike Color', configs.tempColorConfig, 'overstrike', self.themeSampleText, 'font'))
+            root, self.vscOptionsButtonOverstrikeColor, 'VSC Overstrike Color', configs.tempColorConfig, 'overstrike', self.themesSampleText, 'font'))
 
         self.themesSelectionCombobox.bind(
-            "<<ComboboxSelected>>", self.comboboxThemeChange)
+            "<<ComboboxSelected>>", lambda event: self.comboboxThemeChange(event, configs))
         self.sidePrefixSelectionCombobox.bind(
-            "<<ComboboxSelected>>", self.comboboxSidePrefixChange)
+            "<<ComboboxSelected>>", lambda event: self.comboboxSidePrefixChange(event, configs))
 
         self.themesOptionsSave = ttk.Button(themeTab, text="Save on Current")
         self.themesOptionsSave.pack(side="right", anchor="se", padx=10, pady=5)
@@ -543,60 +554,75 @@ class ThemeTabApp(MainBuilder):
         else:
             hex = configDict[key]
         if targetType == 'text' and ((hex != configDict[key] and chooseColor == True) or chooseColor == False):
+            configDict[key] = hex
             target.config(**{key: hex})
             if key == 'selectbackground':
                 target.config({'inactiveselect': hex})
             if caller != None:
                 caller.config(highlightbackground=hex, bg=hex)
         if targetType == 'side' and ((hex != configDict[key] and chooseColor == True) or chooseColor == False):
+            configDict[key] = hex
             target.config(**{key: hex})
             if caller != None:
                 caller.config(highlightbackground=hex, bg=hex)
         if targetType == 'font' and key == 'padrao' and ((hex != configDict[key] and chooseColor == True) or chooseColor == False):
+            configDict[key] = hex
             target.config(foreground=hex)
+            target.format.colorConfig = configDict
+            target.fastMenu.colorDict = configDict
             if caller != None:
                 caller.config(highlightbackground=hex, bg=hex)
+            target.format.validateTags(target.tag_indexes("1.0", "end"))
         elif targetType == 'font' and ((hex != configDict[key] and chooseColor == True) or chooseColor == False):
             configDict[key] = hex
+            target.format.colorConfig = configDict
+            target.fastMenu.colorDict = configDict
             if caller != None:
                 caller.config(highlightbackground=hex, bg=hex)
+            target.format.validateTags(target.tag_indexes("1.0", "end"))
+        elif targetType == "panned":
+            configDict[key] = hex
+            target.config(**{key: hex})
+            if caller != None:
+                caller.config(highlightbackground = hex, bg = hex)
 
-    def comboboxThemeChange(self, event):
+    def comboboxThemeChange(self, event, configs):
         textCallersAndKeys = {self.textOptionsButtonBGColor: 'bg', self.textOptionsButtonFGColor: 'fg', self.textOptionsButtonSelectBGColor: 'selectbackground',
                               self.textOptionsButtonSelectFGColor: 'selectforeground', self.textOptionsButtonInsertBGColor: 'insertbackground'}
         sideCallersAndKeys = {self.sideOptionsButtonBGColor: 'bg', self.sideOptionsButtonFGColor: 'fg', self.sideOptionsButtonSelectBGColor: 'selectbackground',
                               self.sideOptionsButtonSelectFGColor: 'selectforeground', self.sideOptionsButtonHighlightBGColor: 'highlightbackground', self.sideOptionsButtonHighlightFGColor: 'highlightforeground'}
-        colorCallersAndKeys = {self.vscOptionsButtonDefaultColor: 'default', self.vscOptionsButtonTitleColor: 'title', self.vscOptionsButtonSubtitleColor: 'subtitle',
+        colorCallersAndKeys = {self.vscOptionsButtonTitleColor: 'title', self.vscOptionsButtonSubtitleColor: 'subtitle',
                                self.vscOptionsButtonBoldColor: 'bold', self.vscOptionsButtonItalicColor: 'italic', self.vscOptionsButtonUnderlineColor: 'underline', self.vscOptionsButtonOverstrikeColor: 'overstrike'}
 
-        tempConfig = ConfigManager().readConfig(toPath(join(expanduser("~/Documents/Notecalc"),
-                                                            "config.ini")), globalRead=False, theme=event.widget.get().lower())
+        tempConfig = ConfigManager().readTheme(event.widget.get())
 
-        tempTextConfig = tempConfig["textConfig"]
-        tempSideConfig = tempConfig["sideConfig"]
-        tempColorConfig = tempConfig["colorConfig"]
+        configs.tempTextConfig = tempConfig["textConfig"]
+        configs.tempSideConfig = tempConfig["sideConfig"]
+        configs.tempPannedBGColor = {"bg": tempConfig["pannedWindowBGConfig"]}
+        configs.tempColorConfig = tempConfig["colorConfig"]
 
         for caller, key in textCallersAndKeys.items():
-            self.changeColors(configDict=tempTextConfig, caller=caller, key=key,
-                              target=self.themesSampleSide, targetType='text', chooseColor=False)
+            self.changeColors(configDict=configs.tempTextConfig, caller=caller, key=key,
+                              target=self.themesSampleText, targetType='text', chooseColor=False)
         for caller, key in sideCallersAndKeys.items():
-            self.changeColors(configDict=tempSideConfig, caller=caller, key=key,
+            self.changeColors(configDict=configs.tempSideConfig, caller=caller, key=key,
                               target=self.themesSampleSide, targetType='side', chooseColor=False)
         for caller, key in colorCallersAndKeys.items():
-            self.changeColors(configDict=tempColorConfig, caller=caller, key=key,
-                              target=self.themesSampleSide, targetType='font', chooseColor=False)
+            self.changeColors(configDict=configs.tempColorConfig, caller=caller, key=key,
+                              target=self.themesSampleText, targetType='font', chooseColor=False)
+        self.changeColors(configDict=configs.tempPannedBGColor, caller=self.textOptionsButtonPannedBGColor, key = "bg",
+                            target=self.themesLeftPannedWin, targetType="panned", chooseColor=False)
 
-    def comboboxSidePrefixChange(self, event):
-        tempConfig = ConfigManager().readConfig(toPath(join(expanduser("~/Documents/Notecalc"),
-                                                            "config.ini")), globalRead=False, sidePrefix=event.widget.get())
+    def comboboxSidePrefixChange(self, event, configs):
+        tempConfig = ConfigManager().readPrefix(event.widget.get())
 
-        prefix = {"upper": tempConfig["cfgSideUpper"], "actual": tempConfig["cfgSideActual"],
-                  "folder": tempConfig["cfgSideFolder"], "file": tempConfig["cfgSideFile"]}
+        prefix = {"upper": tempConfig["upper"], "actual": tempConfig["actual"],
+                  "folder": tempConfig["folder"], "file": tempConfig["file"]}
 
-        tempUpperFolderPrefix = tempConfig["cfgSideUpper"]
-        tempActualFolderPrefix = tempConfig["cfgSideActual"]
-        tempFolderPrefix = tempConfig["cfgSideFolder"]
-        tempFilePrefix = tempConfig["cfgSideFile"]
+        configs.tempUpperFolderPrefix = tempConfig["upper"]
+        configs.tempActualFolderPrefix = tempConfig["actual"]
+        configs.tempFolderPrefix = tempConfig["folder"]
+        configs.tempFilePrefix = tempConfig["file"]
 
         self.readDir(self.themesSampleSide, prefix=prefix)
 
@@ -607,7 +633,7 @@ class OptionsWindow(MainBuilder):
         self.configManager = ConfigManager()
 
         self.root = MainBuilder.createTopLevel(
-            mainRoot, geometry="900x720+0+0", minsizeX=800, minsizeY=620, title="Options")
+            mainRoot, geometry="900x640+0+0", minsizeX=800, minsizeY=640, title="Options")
 
         self.tabControl = ttk.Notebook(self.root)
 

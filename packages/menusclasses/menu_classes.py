@@ -23,8 +23,9 @@ class Format():
             return self.chooseColor()
         self.addTags(colorHex=globals.hex)
 
-    def validateTags(self):
-        tags = self.text.tagsInSelection()
+    def validateTags(self, tags = None):
+        if tags == None:
+            tags = self.text.tagsInSelection()
         for tag in tags:
             #Tag template
             #{"prefix" : None, "tags" : list(), "size" = 18, "hex" : '#cccccc'}
@@ -60,10 +61,9 @@ class Format():
             size = tagDict["size"]
             formatFont.config(size=size)
 
-            if tagDict["prefix"] == "color" or tagDict["prefix"] == None:
+            if tagDict["prefix"] == "color" or tagDict["prefix"] == None or self.vsc == False:
                 self.text.tag_config(tag, font=formatFont, foreground=tagDict["hex"])
             elif tagDict["prefix"] in self.colorConfig.keys() and self.vsc:
-                print("Tchau")
                 self.text.tag_config(tag, font=formatFont, foreground=self.colorConfig[tagDict["prefix"]])
 
     def createNewTag(self, tag=None, size=None, colorHex=None, sizeMod = False):
@@ -276,7 +276,7 @@ class File():
             self.root.destroy()
 
     def modified(self):
-        if self.text.edit_modified() == True:            
+        if self.text.edit_modified() == True:
             self.root.title("Lolicalc * "+self.cwdForTitle())
         elif self.text.edit_modified() == False:
             self.root.title("Lolicalc "+self.cwdForTitle())
@@ -287,7 +287,7 @@ class File():
         self.root = root
         self.text = text
         self.modified()
-        
+
 
         # Bindings
         self.text.bind("<<TagAdd>>", lambda event: self.tagAdded(event))

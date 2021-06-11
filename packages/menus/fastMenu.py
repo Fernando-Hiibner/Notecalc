@@ -4,10 +4,14 @@ from ..extras import globals
 
 
 class FastMenu():
-    def __init__(self, root, text):
+    def __init__(self, root, text, colorDict = None, vsc = None):
         self.root = root
         self.text = text
         self.fastMenu = Menu(self.root, tearoff=0)
+        if colorDict == None:
+            self.colorDict = globals.colorConfig
+        if vsc == None:
+            self.vsc = globals.vsc
 
         def popup(event):
             try:
@@ -16,37 +20,37 @@ class FastMenu():
                 self.fastMenu.grab_release()
 
         self.fastMenu.add_command(
-        label="Title", command=lambda: Format(self.root, self.text).addTags(tag = "title", size = 4, sizeMod= True), accelerator="Alt+T")
+        label="Title", command=lambda: Format(self.root, self.text, self.colorDict,).addTags(tag = "title", size = 4, sizeMod= True), accelerator="Alt+T")
 
         self.fastMenu.add_command(
-            label="Subtitle", command=lambda: Format(self.root, self.text).addTags(tag = "subtitle", size = 2, sizeMod= True), accelerator="Alt+S")
+            label="Subtitle", command=lambda: Format(self.root, self.text, self.colorDict, self.vsc).addTags(tag = "subtitle", size = 2, sizeMod= True), accelerator="Alt+S")
 
         self.fastMenu.add_command(
-            label="Bold", command=lambda: Format(self.root, self.text).addTags(tag = "bold"), accelerator="Alt+B")
+            label="Bold", command=lambda: Format(self.root, self.text, self.colorDict, self.vsc).addTags(tag = "bold"), accelerator="Alt+B")
 
         self.fastMenu.add_command(
-            label="Italic", command=lambda: Format(self.root, self.text).addTags(tag = "italic"), accelerator="Alt+I")
+            label="Italic", command=lambda: Format(self.root, self.text, self.colorDict, self.vsc).addTags(tag = "italic"), accelerator="Alt+I")
 
         self.fastMenu.add_command(
-            label="Underline", command=lambda: Format(self.root, self.text).addTags(tag = "underline"), accelerator="Alt+Shift+-")
+            label="Underline", command=lambda: Format(self.root, self.text, self.colorDict, self.vsc).addTags(tag = "underline"), accelerator="Alt+Shift+-")
 
-        self.fastMenu.add_command(label="Overstrike", command=lambda: Format(self.root, self.text).addTags(tag = "overstrike"))
+        self.fastMenu.add_command(label="Overstrike", command=lambda: Format(self.root, self.text, self.colorDict, self.vsc).addTags(tag = "overstrike"))
 
-        self.fastMenu.add_command(label="Remove tags", command=lambda: Format(self.root, self.text).addTags(tag = "remove"), accelerator="Alt+R")
+        self.fastMenu.add_command(label="Remove tags", command=lambda: Format(self.root, self.text, self.colorDict, self.vsc).addTags(tag = "remove"), accelerator="Alt+R")
 
         self.fastMenu.add_separator()
 
         self.fastMenu.add_command(
-            label="Choose Color", command=lambda: Format(self.root, self.text).chooseColor(parent = self.root))
+            label="Choose Color", command=lambda: Format(self.root, self.text, self.colorDict, self.vsc).chooseColor(parent = self.root))
 
         self.fastMenu.add_command(
-            label="Last Color", command=lambda: Format(self.root, self.text).changeColor(), accelerator="Alt+C")
+            label="Last Color", command=lambda: Format(self.root, self.text, self.colorDict, self.vsc).changeColor(), accelerator="Alt+C")
 
 
         #SubMenu
         self.predefinedColors = Menu(self.fastMenu, tearoff = 0)
         for name, color in globals.colorConfig.items():
-            self.predefinedColors.add_command(label = name.capitalize(), command=lambda color = color: Format(self.root, self.text).changeColor(colorHex = color))
+            self.predefinedColors.add_command(label = name.capitalize(), command=lambda color = color: Format(self.root, self.text, self.colorDict, self.vsc).changeColor(colorHex = color))
         self.fastMenu.add_cascade(label = "Predefined Colors", menu = self.predefinedColors)
 
         self.fastMenu.add_separator()
@@ -54,7 +58,7 @@ class FastMenu():
         for category, simbols in globals.simbols.items():
             self.categoryMenu = Menu(self.simbolsMenu, tearoff = 0)
             for simbol in simbols:
-                self.categoryMenu.add_command(label = simbol, command=lambda simbol = simbol: Format(self.root, self.text).insertSimbols(simbol))
+                self.categoryMenu.add_command(label = simbol, command=lambda simbol = simbol: Format(self.root, self.text, self.colorDict, self.vsc).insertSimbols(simbol))
             self.simbolsMenu.add_cascade(label = category, menu = self.categoryMenu)
         self.fastMenu.add_cascade(
             label="Simbols", menu=self.simbolsMenu)

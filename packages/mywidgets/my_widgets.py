@@ -137,12 +137,15 @@ class myScrolledText(tkST.ScrolledText):
                     except IndexError:
                         tagsTupleList.append((index1, tagsIndexOff[i]))
             tagsIndexes[tagInAnalylis] = tagsTupleList
-        
+
         if "sel" in self.tag_names():
-            tagsNotInSample = self.tag_names("sel.first")
-            for tag in tagsNotInSample:
-                if tag != "sel" and tag not in tagsIndexes.keys():
-                    tagsIndexes[tag] = [(str(self.tag_ranges("sel")[0]), str(self.tag_ranges("sel")[1]))]
+            try:
+                tagsNotInSample = self.tag_names("sel.first")
+                for tag in tagsNotInSample:
+                    if tag != "sel" and tag not in tagsIndexes.keys():
+                        tagsIndexes[tag] = [(str(self.tag_ranges("sel")[0]), str(self.tag_ranges("sel")[1]))]
+            except:
+                pass
         return tagsIndexes
 
     def tagsInSelection(self):

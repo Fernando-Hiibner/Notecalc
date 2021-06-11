@@ -126,6 +126,31 @@ class ConfigManager():
         with open(self.configDir, "w") as newConfig:
             dump(gConfig, newConfig, indent=4)
             newConfig.close()
+    def readPrefix(self, prefixName):
+        with open(self.configDir, "r", encoding="utf-8") as getPrefix:
+            prefix = load(getPrefix)
+            getPrefix.close()
+        keyName = {prefix[sideKey]["name"] : prefix[sideKey]
+                    for sideKey in prefix.keys()
+                    if "sidePrefix" in sideKey}
+        thisPrefixDict = keyName[prefixName]
+        return {
+            "upper" : thisPrefixDict["upperFolder"],
+            "actual" : thisPrefixDict["actualFolder"],
+            "folder" : thisPrefixDict["folder"],
+            "file" : thisPrefixDict["file"]
+        }
+    def readTheme(self, themeName):
+        with open(toPath(join(self.themesFolder, themeName+".json")), "r", encoding="utf-8") as getTheme:
+            theme = load(getTheme)
+            getTheme.close()
+        return {
+            "theme" : themeName,
+            "textConfig" : theme["textConfig"],
+            "sideConfig" : theme["sideConfig"],
+            "pannedWindowBGConfig" : theme["pannedWindowBGConfig"],
+            "colorConfig" : theme["colorConfig"]
+        }
     def modifyTheme(self, keyValueDict, themeName):
         with open(toPath(join(self.themesFolder, themeName+".json")), "r", encoding="utf-8") as getTheme:
             tConfig = load(getTheme)

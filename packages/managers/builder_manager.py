@@ -32,7 +32,7 @@ class MainBuilder():
             topLevel.iconbitmap(icon)
         return topLevel
 
-    def createText(self, master = None, textConfig = None, font = None):
+    def createText(self, master = None, textConfig = None, font = None, **kw):
         if textConfig == None:
             textConfig = globals.textConfig
         if font == None:
@@ -40,7 +40,7 @@ class MainBuilder():
         text = myScrolledText(master, bg=textConfig["bg"], fg=textConfig["fg"], insertbackground=textConfig["insertbackground"],
                              tabs=(
                                  textConfig["tab"]), selectbackground=textConfig["selectbackground"], selectforeground=textConfig["selectforeground"],
-                             relief=FLAT, undo=True, autoseparators=True, richText = True)
+                             relief=FLAT, undo=True, autoseparators=True,**kw)
         text.configure(font=font)
         return text
 
@@ -67,8 +67,8 @@ class SubBuilder(MainBuilder):
         side = super().createSide(master = master)
         side.bind("<<ListboxSelect>>", self.selected)
         return side
-    def createText(self, master = None):
-        text = super().createText(master = master)
+    def createText(self, master = None, **kw):
+        text = super().createText(master = master, **kw)
         text.pack(fill=BOTH, expand=1)
         return text
     def selected(self, event):
@@ -193,7 +193,7 @@ class SubBuilder(MainBuilder):
         self.subPannedWindow = PanedWindow(
             self.mainPannedWindow, relief="flat", bg=globals.pannedWindowBGConfig, borderwidth=0)
         self.mainPannedWindow.add(self.subPannedWindow)
-        self.text = self.createText(master=self.subPannedWindow)
+        self.text = self.createText(master=self.subPannedWindow, richText = True)
         #Mostrar ou ocultar Side
         self.sideControl = globals.side
         self.root.bind("<Alt-p>", lambda event: self.showHideSide())

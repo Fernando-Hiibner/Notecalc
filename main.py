@@ -19,7 +19,7 @@ try:
 
     try:
         abrirArquivo(janela, Caixa, toPath(argv[1]))
-        globals.dirDeTrabalhoAtual = toPath(argv[1])
+        globals.currentWorkingDirectory = toPath(argv[1])
     except:
         pass
 

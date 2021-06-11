@@ -35,15 +35,3 @@ class Globals():
     pannedWindowBGConfig = "#f3f3f3"
     global sideConfig
     sideConfig = None
-    #O tema dark que vai vir por padrão
-    global darkColorConfig
-    darkColorConfig = None
-
-    global darkPannedWindowBGConfig
-    darkPannedWindowBGConfig = None
-
-    global darkTextConfig
-    darkTextConfig = None
-
-    global darkSideConfig
-    darkSideConfig = None
