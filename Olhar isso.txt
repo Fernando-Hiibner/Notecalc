@@ -20,3 +20,8 @@ def make_draggable(widget):
     widget.bind("<B1-Motion>", on_drag_motion)
 
 https://stackoverflow.com/questions/37280004/tkinter-how-to-drag-and-drop-widgets
+
+https://wiki.tcl-lang.org/page/wm+attributes
+
+https://www.dirceuresende.com/blog/sql-server-management-studio-ssms-como-ativar-o-tema-dark-dark-theme-support/
+https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/text.html
