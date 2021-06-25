@@ -21,6 +21,11 @@ def make_draggable(widget):
 
 https://stackoverflow.com/questions/37280004/tkinter-how-to-drag-and-drop-widgets
 
+
+https://web.archive.org/web/20190515021108id_/http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/key-names.html
+https://www.tcl.tk/man/tcl8.4/TkCmd/keysyms.html
+https://stackoverflow.com/questions/37084313/how-to-display-rendered-html-content-in-text-widget-of-tkinter-in-python-3-4-x
+
 https://wiki.tcl-lang.org/page/wm+attributes
 
 https://www.dirceuresende.com/blog/sql-server-management-studio-ssms-como-ativar-o-tema-dark-dark-theme-support/

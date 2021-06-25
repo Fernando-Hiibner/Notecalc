@@ -1,4 +1,0 @@
-TODO Limpar o menu de opções (o código)
-TODO Fazer uma limpeza e formatada no código
-TODO Testar varios cenarios
-TODO IMPORTANTE! Arrumar o file_operations - Semi concluido
