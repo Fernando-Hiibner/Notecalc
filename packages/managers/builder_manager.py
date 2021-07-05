@@ -14,7 +14,7 @@ from ..extras.file_operations import *
 from ..mywidgets.my_widgets import myScrolledText, HighlightListBox
 
 class MainBuilder():
-    def createRoot(self, minsizeX=450, minsizeY=575, geometry="900x575+0+0", title="Notecalc", icon=None):
+    def createRoot(self, minsizeX=100, minsizeY=100, geometry="900x575+0+0", title="Notecalc", icon=None):
         root = Tk()
         root.minsize(minsizeX, minsizeY)
         root.geometry(geometry)

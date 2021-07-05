@@ -47,5 +47,6 @@ createFileMenu(root, text, menu)
 createEditMenu(root, text, menu)
 createFormatMenu(root, text, menu)
 createOptionsMenu(root, menu)
-root.attributes("-alpha", 0.9)
+root.attributes("-alpha", 0.9) #TEMP
+root.attributes("-topmost", True) #TEMP
 root.mainloop()
